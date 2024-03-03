@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/estilos.css" />
+    <title>Chatea con tu PDF</title>
+  </head>
+  <body>
+    <div class="prin">
+      <h1>Chatea con tu PDF</h1>
+      {% if file_name %}
+      <p>
+        Archivo actual: <span>{{ file_name }}.</span> Puedes hacer una nueva
+        pregunta o cargar un nuevo archivo.
+      </p>
+      {% else %}
+      <p>
+        No hay un archivo cargado. Por favor, carga un archivo PDF para
+        continuar.
+      </p>
+      {% endif %}
+      <form method="POST" enctype="multipart/form-data">
+        <div>
+          <label for="file">Escoge tu archivo:</label>
+          <input type="file" name="file" id="file" />
+        </div>
+        <div>
+          <label for="pregunta">Haz una pregunta sobre el PDF:</label>
+          <input
+            type="text"
+            name="pregunta"
+            id="pregunta"
+            placeholder="Escribe tu pregunta aquí"
+          />
+        </div>
+        <button type="submit">Enviar pregunta</button>
+      </form>
+      {% if respuesta %}
+      <div id="respuesta">
+        <h2>Respuesta:</h2>
+        <p>{{ respuesta }}</p>
+      </div>
+      {% endif %}
+    </div>
+    <script>
+      function efectoMaquinaDeEscribir(elemento, texto, velocidad = 100) {
+        let i = 0;
+        function mostrarLetra() {
+          if (i < texto.length) {
+            elemento.innerHTML += texto.charAt(i);
+            i++;
+            setTimeout(mostrarLetra, velocidad);
+          }
+        }
+        mostrarLetra();
+      }
+
+      // Ejecuta el efecto de máquina de escribir para la respuesta
+      const textoRespuesta = "{{ respuesta | safe }}"; // Usa el filtro 'safe' para asegurar que Flask no escape caracteres especiales en la respuesta
+      if (textoRespuesta) {
+        const elementoRespuesta = document.getElementById("respuesta");
+        elementoRespuesta.innerHTML = "";
+        efectoMaquinaDeEscribir(elementoRespuesta, textoRespuesta, 40);
+      }
+    </script>
+  </body>
+</html>
