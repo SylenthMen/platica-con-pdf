@@ -8,10 +8,15 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instalar dependencias de Python
-RUN python -m venv --copies /opt/venv \
-    && . /opt/venv/bin/activate \
-    && pip install --upgrade pip \
-    && pip install -r requirements.txt
+# RUN python -m venv --copies /opt/venv \
+#     && . /opt/venv/bin/activate \
+#     && pip install --upgrade pip \
+    #&& pip install -r requirements.txt
+    RUN python -m venv --copies /opt/venv
+RUN . /opt/venv/bin/activate
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
 
 # Establecer variables de entorno
 ENV PATH="/opt/venv/bin:$PATH"
