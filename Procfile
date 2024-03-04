@@ -1,0 +1,1 @@
+web: python app.py migrate && gunicorn app.wsgi
