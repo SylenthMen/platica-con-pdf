@@ -67,5 +67,5 @@ def hacer_pregunta_a_gpt(texto_contexto, pregunta):
     except Exception as e:
         return f"Error al generar respuesta: {str(e)}"
 
-if __name__ == '__main__':
-    app.run(debug=True)
+#if __name__ == '__main__':
+#   app.run(debug=True)
