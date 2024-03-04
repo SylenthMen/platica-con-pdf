@@ -1,5 +1,24 @@
-RUN python -m venv --copies /opt/venv
+# Usar una imagen base oficial de Python
+FROM python:3.9
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copiar los archivos de requisitos primero para aprovechar la caché de capas
+COPY requirements.txt .
+
+# Instalar dependencias de Python
+RUN python -m venv --copies /opt/venv \
+    && . /opt/venv/bin/activate \
+    && pip install --upgrade pip \
+    && pip install -r requirements.txt
+
+# Establecer variables de entorno
 ENV PATH="/opt/venv/bin:$PATH"
-RUN pip install SomePackage==1.0.0
-RUN pip install AnotherPackage==2.0.0
-# Repite el comando RUN pip install para cada dependencia, una por una
+
+# Copiar el resto del código de la aplicación al directorio de trabajo
+COPY . .
+
+# Comando para ejecutar la aplicación
+CMD ["flask", "run", "--host=0.0.0.0"]
+
