@@ -26,5 +26,5 @@ COPY . .
 
 # Comando para ejecutar la aplicación
 #CMD ["gunicorn", "app:app", "-w", "4", "--threads", "2", "-b", "0.0.0.0:8000"]
-CMD gunicorn app:app --workers 4 --threads 2 -b :$PORT
+CMD gunicorn app:app --workers 1 --threads 2 -b :$PORT
 
