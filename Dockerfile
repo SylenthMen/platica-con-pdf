@@ -25,5 +25,5 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY . .
 
 # Comando para ejecutar la aplicación
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "app:app", "-w", "4", "--threads", "2", "-b", "0.0.0.0:8000"]
 
