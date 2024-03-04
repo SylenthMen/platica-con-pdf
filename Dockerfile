@@ -11,8 +11,8 @@ COPY requirements.txt .
 # RUN python -m venv --copies /opt/venv \
 #     && . /opt/venv/bin/activate \
 #     && pip install --upgrade pip \
-    #&& pip install -r requirements.txt
-    RUN python -m venv --copies /opt/venv
+#&& pip install -r requirements.txt
+RUN python -m venv --copies /opt/venv
 RUN . /opt/venv/bin/activate
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -25,5 +25,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY . .
 
 # Comando para ejecutar la aplicación
-CMD ["gunicorn", "app:app", "-w", "4", "--threads", "2", "-b", "0.0.0.0:8000"]
+#CMD ["gunicorn", "app:app", "-w", "4", "--threads", "2", "-b", "0.0.0.0:8000"]
+CMD gunicorn app:app --workers 4 --threads 2 -b :$PORT
 
