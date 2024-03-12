@@ -3,8 +3,40 @@ import os
 import pdfplumber
 import openai
 import tempfile
+from flask_apscheduler import APScheduler
+import shutil
+
+class Config:
+    JOBS = [
+        {
+            'id': 'delete_uploads',
+            'func': 'app:delete_uploads_contents',
+            'trigger': 'interval',
+            'hours': 1
+        }
+    ]
+
+    SCHEDULER_API_ENABLED = True
+
+def delete_uploads_contents():
+    folder = app.config['UPLOAD_FOLDER']
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
 
 app = Flask(__name__)
+app.config.from_object(Config())
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
+
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'un_valor_predeterminado_para_desarrollo')
 openai.api_key = os.getenv('OPENAI_API_KEY')
